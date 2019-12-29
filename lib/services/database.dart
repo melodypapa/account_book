@@ -26,7 +26,7 @@ class DatabaseHelper {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String dbName = join(documentsDirectory.path, "account_book.db");
     print("create database $dbName");
-    _db = await openDatabase(dbName, version: 1, onCreate: _onCreate);
+    _db = await openDatabase(dbName, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
   Future<String> loadSchema(String version) {
@@ -35,7 +35,6 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     String statement = await loadSchema("1.0");
-    print(statement);
     try {
       await db.execute(statement);
     }
@@ -48,5 +47,12 @@ class DatabaseHelper {
         "branch_name TEXT,"
         "color TEXT"
         ")");*/
+  }
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async{
+    if (oldVersion == 1 && newVersion == 2){
+      String statement = await loadSchema("2.0");
+      await db.execute(statement);
+    }
   }
 }

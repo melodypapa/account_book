@@ -1,7 +1,21 @@
+import 'package:account_book/app/app.dart';
+import 'package:account_book/services/services.dart';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'app/app.dart';
-
-void main() => runApp(
-      AccountBookApp(),
-    );
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => BankService(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DepositService(),
+        )
+      ],
+      child: AccountBookApp(),
+    ),
+  );
+}

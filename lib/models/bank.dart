@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 class Bank {
   int bankId;
   String name;
-  String branchName;
+  int createdAt;
 
-  Bank({this.bankId, @required this.name, @required this.branchName});
+  Bank({this.bankId, @required this.name, @required this.createdAt});
 
   Map<String, dynamic> toMapWithoutId() {
     final map = new Map<String, dynamic>();
     map["name"] = name;
-    map["branch_name"] = branchName;
+    map["created_at"] = createdAt;
     return map;
   }
 
@@ -19,7 +19,7 @@ class Bank {
     final map = new Map<String, dynamic>();
     map["bank_id"] = bankId;
     map["name"] = name;
-    map["branch_name"] = branchName;
+    map["created_at"] = createdAt;
     return map;
   }
 
@@ -27,17 +27,12 @@ class Bank {
     return Bank(
       bankId: data['bank_id'],
       name: data['name'],
-      branchName: data['branch_name'],
+      createdAt: data['created_at'],
     );
   }
-}
 
-class BankMgr extends ChangeNotifier {
-  DatabaseHelper dbInstance = DatabaseHelper();
-
-  Future<int> createBank(String name, String branchName) async{
-    final bank = Bank(name: name, branchName: branchName);
-    int id = await dbInstance.db.insert("bank", bank.toMapWithoutId());
-    return id;
+  @override
+  String toString() {
+    return "Bank: $name";
   }
 }

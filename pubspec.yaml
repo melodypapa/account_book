@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -23,7 +23,7 @@ dependencies:
   path_provider: 1.5.1
   provider: ^3.0.0
   #flutter_slidable: any
-  #intl: any
+  intl: 0.16.0
   #image_picker: any
   # flutter_calendar_carousel: any
 

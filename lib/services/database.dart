@@ -20,9 +20,6 @@ class DatabaseHelper {
   }
 
   void initDb() async {
-    if (kDebugMode == true){
-      await Sqflite.setDebugModeOn(true);
-    }
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String dbName = join(documentsDirectory.path, "account_book.db");
     print("create database $dbName");

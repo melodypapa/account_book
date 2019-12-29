@@ -1,17 +1,16 @@
-import 'package:account_book/services/database.dart';
 import 'package:flutter/material.dart';
 
 class Bank {
   int bankId;
   String name;
-  int createdAt;
+  DateTime createdAt;
 
   Bank({this.bankId, @required this.name, @required this.createdAt});
 
   Map<String, dynamic> toMapWithoutId() {
     final map = new Map<String, dynamic>();
     map["name"] = name;
-    map["created_at"] = createdAt;
+    map["created_at"] = createdAt.microsecondsSinceEpoch;
     return map;
   }
 
@@ -19,7 +18,7 @@ class Bank {
     final map = new Map<String, dynamic>();
     map["bank_id"] = bankId;
     map["name"] = name;
-    map["created_at"] = createdAt;
+    map["created_at"] = createdAt.microsecondsSinceEpoch;
     return map;
   }
 
@@ -27,7 +26,7 @@ class Bank {
     return Bank(
       bankId: data['bank_id'],
       name: data['name'],
-      createdAt: data['created_at'],
+      createdAt: DateTime.fromMicrosecondsSinceEpoch(data['created_at']),
     );
   }
 

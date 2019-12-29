@@ -7,7 +7,7 @@ class AccountBookApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: DepositCreatePage(),
       routes: <String, WidgetBuilder>{
         '/Deposit/Create': (BuildContext buildContext) => DepositCreatePage(),
         '/Home': (BuildContext buildContext) => HomePage(),

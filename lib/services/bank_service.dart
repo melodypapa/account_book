@@ -8,7 +8,7 @@ class BankService extends ChangeNotifier {
   Future<int> createBank({@required String name}) async {
     final bank = Bank(
       name: name,
-      createdAt: DateTime.now().millisecondsSinceEpoch,
+      createdAt: DateTime.now(),
     );
 
     int id = await _dbInstance.db.insert("bank", bank.toMapWithoutId());

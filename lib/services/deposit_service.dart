@@ -22,7 +22,8 @@ class DepositService extends ChangeNotifier {
   }
 
   void loadBankOptions() async{
-    List<Map> maps = await _dbInsance.db.query(DatabaseHelper.tableBank, columns: ["bank_id", "name"]);
+    print(_dbInsance.db);
+    /*List<Map> maps = await _dbInsance.db.query(DatabaseHelper.tableBank, columns: ["bank_id", "name"]);
 
     if (maps.length > 0){
       _bankOptions = [];
@@ -33,6 +34,6 @@ class DepositService extends ChangeNotifier {
         currentBankId = _bankOptions[0].bankId;
       }
       notifyListeners();
-    }
+    }*/
   }
 }

@@ -3,7 +3,7 @@ import 'package:account_book/services/database.dart';
 import 'package:flutter/material.dart';
 
 class DepositService extends ChangeNotifier {
-  final DatabaseHelper _dbInsance = DatabaseHelper();
+  final DatabaseInstance dbInstance;
   int _currentBankId;
   List<Bank> _bankOptions;
 
@@ -13,16 +13,17 @@ class DepositService extends ChangeNotifier {
 
   set currentBankId(int bankId){
     _currentBankId = bankId;
+    print("bankdId changes to $currentBankId");
     notifyListeners();
   }
 
-  DepositService(){
+  DepositService({@required this.dbInstance}){
     _bankOptions = [];
     _currentBankId = 0;
   }
 
   void loadBankOptions() async{
-    print(_dbInsance.db);
+    print(dbInstance.db);
     /*List<Map> maps = await _dbInsance.db.query(DatabaseHelper.tableBank, columns: ["bank_id", "name"]);
 
     if (maps.length > 0){

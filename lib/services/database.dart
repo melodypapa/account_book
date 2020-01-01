@@ -6,32 +6,32 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class DatabaseHelper {
-  static final DatabaseHelper _instance = new DatabaseHelper.internal();
+class DatabaseInstance {
+  static final DatabaseInstance _instance = new DatabaseInstance.internal();
   static final tableBank = "Bank";
 
-  factory DatabaseHelper() => _instance;
+  factory DatabaseInstance() => _instance;
   static Database _db;
 
   Database get db => _db;
 
-  DatabaseHelper.internal(){
-    initDb();
+  DatabaseInstance.internal(){
+    //initDb();
   }
 
-  void initDb() async {
+  Future<void> initDb() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String dbName = join(documentsDirectory.path, "account_book.db");
     print("create database $dbName");
     _db = await openDatabase(dbName, version: 1, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
-  Future<String> loadSchema(String version) {
+  Future<String> _loadSchema(String version) {
     return rootBundle.loadString('assets/db_schema/schema_$version.sql');
   }
 
   void _onCreate(Database db, int version) async {
-    String statement = await loadSchema("1.0");
+    String statement = await _loadSchema("1.0");
     try {
       await db.execute(statement);
     }
@@ -48,7 +48,7 @@ class DatabaseHelper {
 
   void _onUpgrade(Database db, int oldVersion, int newVersion) async{
     if (oldVersion == 1 && newVersion == 2){
-      String statement = await loadSchema("2.0");
+      String statement = await _loadSchema("2.0");
       await db.execute(statement);
     }
   }

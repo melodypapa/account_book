@@ -46,9 +46,9 @@ class _BankFormState extends State<BankForm> {
           ListTile(
             title: TextFormField(
               controller: _textNameController,
-              inputFormatters: <TextInputFormatter>[
+              /*inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter(RegExp("[a-fA-F0-9]")),
-              ],
+              ],*/
               decoration: InputDecoration(
                 labelText: "Bank name",
                 border: OutlineInputBorder(),
@@ -58,8 +58,9 @@ class _BankFormState extends State<BankForm> {
           ListTile(
             title: RaisedButton(
               child: Text("Save"),
-              onPressed: () {
-                Provider.of<BankService>(context).createBank(name: _textNameController.text);
+              onPressed: () async{
+                int id = await Provider.of<BankService>(context).createBank(name: _textNameController.text);
+                Navigator.of(context).pop(id);
               },
             ),
           )

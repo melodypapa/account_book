@@ -84,7 +84,7 @@ class _DepositEditFormState extends State<DepositEditForm> {
                   ),
                   //style: Theme.of(context).textTheme.title,
                 ),
-                /*InputDecorator(
+                InputDecorator(
                   decoration: const InputDecoration(
                     labelText: 'Bank',
                     hintText: 'Choose the bank',
@@ -102,7 +102,7 @@ class _DepositEditFormState extends State<DepositEditForm> {
                       );
                     }).toList(),
                   ),
-                ),*/
+                ),
                 const SizedBox(height: 8.0),
                 Row(
                   children: <Widget>[
@@ -115,9 +115,9 @@ class _DepositEditFormState extends State<DepositEditForm> {
                 ListTile(
                   trailing: RaisedButton(
                     child: Text("Add Bank"),
-                    onPressed: () {
-                      Navigator.of(context)
-                          .push(MaterialPageRoute<BankFormAction>(
+                    onPressed: () async {
+                      depositService.currentBankId = await Navigator.of(context)
+                          .push(MaterialPageRoute<int>(
                         builder: (BuildContext context) => BankFormPage(),
                         fullscreenDialog: true,
                       ));

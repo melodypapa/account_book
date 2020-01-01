@@ -4,27 +4,28 @@ import 'package:flutter/material.dart';
 
 class DepositService extends ChangeNotifier {
   final DatabaseInstance dbInstance;
-  int _currentBankId;
+  
   List<Bank> _bankOptions;
+  Deposit _currentDeposit;
 
-  List<Bank> get bankOptions => _bankOptions;
-
-  int get currentBankId => _currentBankId;
+  int get currentBankId => _currentDeposit.bankId;
+  Deposit get currentDeposit => _currentDeposit;
 
   set currentBankId(int bankId){
-    _currentBankId = bankId;
+    _currentDeposit.bankId = bankId;
     print("bankdId changes to $currentBankId");
     notifyListeners();
   }
 
+  List<Bank> get bankOptions => _bankOptions;
+
   DepositService({@required this.dbInstance}){
     _bankOptions = [];
-    _currentBankId = 0;
+    _currentDeposit = Deposit.emptyDeposit();
   }
 
   void loadBankOptions() async{
-    print(dbInstance.db);
-    /*List<Map> maps = await _dbInsance.db.query(DatabaseHelper.tableBank, columns: ["bank_id", "name"]);
+    List<Map> maps = await dbInstance.db.query(DatabaseInstance.tableBank, columns: ["bank_id", "name", 'created_at']);
 
     if (maps.length > 0){
       _bankOptions = [];
@@ -35,6 +36,6 @@ class DepositService extends ChangeNotifier {
         currentBankId = _bankOptions[0].bankId;
       }
       notifyListeners();
-    }*/
+    }
   }
 }

@@ -19,7 +19,7 @@ class DepositCreatePage extends StatelessWidget {
         ],
       ),
       body: Container(
-          padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 40.0),
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 30.0),
           child: DepositEditForm()),
     );
   }
@@ -35,6 +35,10 @@ class _DepositEditFormState extends State<DepositEditForm> {
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _periodController = TextEditingController();
   final TextEditingController _interestController = TextEditingController();
+  final FocusNode _amountFocusNode = FocusNode();
+  final FocusNode _peroidFocusNode = FocusNode();
+  final FocusNode _interestFocusNode = FocusNode();
+  final FocusNode _bankFocusNode = FocusNode();
   DateTime _fromDate = DateTime.now();
 
   @override
@@ -49,14 +53,6 @@ class _DepositEditFormState extends State<DepositEditForm> {
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                TextFormField(
-                  controller: _amountController,
-                  decoration: InputDecoration(
-                    labelText: 'Amount',
-                    border: OutlineInputBorder(),
-                  ),
-                  style: Theme.of(context).textTheme.display1,
-                ),
                 DateTimePicker(
                   labelText: 'From',
                   selectedDate: _fromDate,
@@ -66,69 +62,118 @@ class _DepositEditFormState extends State<DepositEditForm> {
                     });
                   },
                 ),
-                const SizedBox(height: 8.0),
-                TextFormField(
-                  controller: _periodController,
-                  decoration: InputDecoration(
-                    labelText: 'Peroid (Month)',
-                    //border: OutlineInputBorder(),
-                  ),
-                  //style: Theme.of(context).textTheme.title,
+                const SizedBox(height: 16.0),
+                DepositTextField(
+                  label: "Amount",
+                  currentFocusField: _amountFocusNode,
+                  controller: _amountController,
+                  nextFocusField: _peroidFocusNode,
+                  border: OutlineInputBorder(),
                 ),
-                const SizedBox(height: 8.0),
-                TextFormField(
+                DepositTextField(
+                  label: "Period (Months)",
+                  currentFocusField: _peroidFocusNode,
+                  nextFocusField: _interestFocusNode,
+                  controller: _periodController,
+                ),
+                DepositTextField(
+                  label: 'Interest(%)',
+                  currentFocusField: _interestFocusNode,
                   controller: _interestController,
-                  decoration: InputDecoration(
-                    labelText: 'Interest',
-                    //border: OutlineInputBorder(),
-                  ),
-                  //style: Theme.of(context).textTheme.title,
+                  nextFocusField: _bankFocusNode,
                 ),
                 InputDecorator(
                   decoration: const InputDecoration(
                     labelText: 'Bank',
                     hintText: 'Choose the bank',
                   ),
-                  child: DropdownButton<int>(
-                    value: depositService.currentBankId,
-                    onChanged: (int bankId) {
-                      depositService.currentBankId = bankId;
-                    },
-                    items: depositService.bankOptions
-                        .map<DropdownMenuItem<int>>((Bank bank) {
-                      return DropdownMenuItem<int>(
-                        value: bank.bankId,
-                        child: Text(bank.name),
-                      );
-                    }).toList(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: DropdownButton<int>(
+                          focusNode: _bankFocusNode,
+                          value: depositService.currentBankId,
+                          onChanged: (int bankId) {
+                            depositService.currentBankId = bankId;
+                          },
+                          items: depositService.bankOptions
+                              .map<DropdownMenuItem<int>>((Bank bank) {
+                            return DropdownMenuItem<int>(
+                              value: bank.bankId,
+                              child: Text(bank.name),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      RaisedButton(
+                        child: Text("Add Bank"),
+                        onPressed: () async {
+                          depositService.currentBankId =
+                              await Navigator.of(context)
+                                  .push(MaterialPageRoute<int>(
+                            builder: (BuildContext context) => BankFormPage(),
+                            fullscreenDialog: true,
+                          ));
+                        },
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      "Bank",
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                  ],
-                ),
                 ListTile(
                   trailing: RaisedButton(
-                    child: Text("Add Bank"),
-                    onPressed: () async {
-                      depositService.currentBankId = await Navigator.of(context)
-                          .push(MaterialPageRoute<int>(
-                        builder: (BuildContext context) => BankFormPage(),
-                        fullscreenDialog: true,
-                      ));
-                    },
+                    child: Text("Save"),
+                    onPressed: () {},
                   ),
-                ),
+                )
               ],
             ),
           ),
         );
       }),
+    );
+  }
+}
+
+class DepositTextField extends StatelessWidget {
+  const DepositTextField({
+    Key key,
+    @required this.label,
+    @required this.controller,
+    @required this.currentFocusField,
+    this.nextFocusField,
+    this.border,
+  }) : super(key: key);
+
+  final String label;
+  final FocusNode currentFocusField;
+  final FocusNode nextFocusField;
+  final TextEditingController controller;
+  final InputBorder border;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TextFormField(
+          focusNode: currentFocusField,
+          keyboardType: TextInputType.number,
+          textInputAction: this.nextFocusField == null
+              ? TextInputAction.go
+              : TextInputAction.next,
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: label,
+            border: border,
+          ),
+          onFieldSubmitted: (v) {
+            FocusScope.of(context).requestFocus(nextFocusField);
+          },
+          style: Theme.of(context).textTheme.title,
+        ),
+        const SizedBox(height: 8.0),
+      ],
     );
   }
 }

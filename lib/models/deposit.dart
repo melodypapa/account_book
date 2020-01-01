@@ -11,12 +11,12 @@ class Deposit {
 
   Deposit({
     this.depositId,
-    @required bankId,
-    @required amount,
-    @required startDate,
-    @required month,
-    @required interest,
-    @required createdAt,
+    @required this.bankId,
+    @required this.amount,
+    @required this.startDate,
+    @required this.month,
+    @required this.interest,
+    @required this.createdAt,
   });
 
   Map<String, dynamic> toMapWithoutId() {
@@ -54,8 +54,19 @@ class Deposit {
     );
   }
 
+  factory Deposit.emptyDeposit() {
+    return Deposit(
+        depositId: null,
+        bankId: 0,
+        amount: 0,
+        interest: 0,
+        month: 0,
+        startDate: null,
+        createdAt: null);
+  }
+
   @override
   String toString() {
-    return "Deposit: $depositId, Amount: $amount";
+    return "DepositId: $depositId, Amount: $amount";
   }
 }

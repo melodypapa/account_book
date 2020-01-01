@@ -1,6 +1,5 @@
 import 'package:account_book/services/services.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class BankPage extends StatelessWidget {
@@ -66,6 +65,10 @@ class _BankFormState extends State<BankForm> {
           )
         ],
       ),
+      onWillPop: () async{
+        Navigator.of(context).pop(0);
+        return false;
+      },
     );
   }
 }
